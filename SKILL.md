@@ -9,6 +9,24 @@ This skill encodes battle-tested patterns for generating and iterating on images
 
 Gemini image models are **conversational**, not diffusion-based. There are no seeds, CFG scales, or strength parameters. You generate by describing what you want, and you iterate by continuing the conversation. This is the fundamental mental model — iteration is a conversation, not parameter tuning.
 
+## Live Source of Truth — Check First
+
+Before generating any code or referencing model IDs / SDK syntax, **invoke the `gemini-interactions-api` skill** (maintained by Google). It is the canonical source for:
+
+- Current Gemini model IDs and availability — deprecations happen, and what was current when this skill was written may not be current today
+- Current SDK package names and minimum versions (`@google/genai` for JS/TS, `google-genai` for Python)
+- Base API patterns for `generateContent`, conversation state, and tool calling
+
+This skill (`nano-banana`) builds **on top of** `gemini-interactions-api`. It adds the image-generation-specific layer:
+- Image-generation prompt engineering (typography, spatial anchoring, negative guidance)
+- Three working methods (fresh, conversational iteration, image-to-image) with conversation forking
+- The Design Critic self-QC loop
+- Local conversation storage for cross-session iteration
+
+**Conflict rule:** if anything in this skill conflicts with `gemini-interactions-api` (model IDs, SDK syntax, package versions), defer to that skill — it is authoritative.
+
+If `gemini-interactions-api` is not installed locally, fetch the latest from https://raw.githubusercontent.com/google-gemini/gemini-skills/main/skills/gemini-interactions-api/SKILL.md and apply it before proceeding.
+
 ## Setup
 
 The skill requires the `@google/genai` npm package and a `GEMINI_API_KEY`.
@@ -42,6 +60,8 @@ If no key is found anywhere, tell the user to get one from Google AI Studio (htt
 
 ## Models
 
+> **Source of truth:** `gemini-interactions-api` maintains the canonical, current Gemini model list. The table below covers **image-generation models specifically** — codenames, image-gen-only capabilities, and selection guidance. If any model below shows as deprecated upstream, use upstream's recommended replacement.
+
 | Model ID | Codename | Best For | Thinking | Max Resolution |
 |---|---|---|---|---|
 | `gemini-3.1-flash-image-preview` | Nano Banana 2 | Default — fast, thinking-enabled, great for iteration | Controllable (`Minimal` / `High`) | 4K |
@@ -56,6 +76,8 @@ If no key is found anywhere, tell the user to get one from Google AI Studio (htt
 - Image Search grounding (pass `tools: [{ google_search: {} }]` with `searchTypes` containing `imageSearch`)
 
 ## Core API Pattern
+
+> Basic SDK setup (client construction, auth, generic `generateContent` skeleton) is covered in `gemini-interactions-api`. The pattern below focuses on **image-generation-specific config**: `responseModalities`, `imageConfig` (aspect ratio, image size), and `thinkingConfig` for the 3.x image models.
 
 Every Gemini image generation call follows this structure:
 

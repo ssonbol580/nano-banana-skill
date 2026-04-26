@@ -19,6 +19,8 @@ Unlike diffusion models, Gemini's image models are **conversational** — there 
 | `gemini-3-pro-image-preview` | Nano Banana Pro | Best quality, hero renders |
 | `gemini-2.5-flash-image` | Nano Banana | Fallback — original model, up to 2K |
 
+> Image-generation model IDs above are accurate at time of writing. The skill itself defers to upstream `gemini-interactions-api` for the canonical, always-current Gemini model list — so this README may lag, but the skill won't.
+
 ## Installation
 
 Drop the `nano-banana/` directory into your Claude Code skills folder:
@@ -27,7 +29,19 @@ Drop the `nano-banana/` directory into your Claude Code skills folder:
 git clone https://github.com/ssonbol580/nano-banana-skill.git ~/.claude/skills/nano-banana
 ```
 
-Then make sure your project has:
+### Recommended companion: `gemini-interactions-api`
+
+This skill defers to Google's officially-maintained [`gemini-interactions-api`](https://github.com/google-gemini/gemini-skills/tree/main/skills/gemini-interactions-api) skill for current model IDs, SDK package versions, and base API patterns — so `nano-banana` stays evergreen as Google ships new models. Install it into the same skills folder:
+
+```bash
+mkdir -p ~/.claude/skills/gemini-interactions-api && \
+  curl -fsSL https://raw.githubusercontent.com/google-gemini/gemini-skills/main/skills/gemini-interactions-api/SKILL.md \
+  -o ~/.claude/skills/gemini-interactions-api/SKILL.md
+```
+
+If the upstream skill isn't present, `nano-banana` will fall back to fetching it on demand. But having it installed locally is the smoother path.
+
+### Project setup
 
 ```bash
 npm install @google/genai
@@ -39,13 +53,14 @@ npm install @google/genai
 
 The skill activates only when you explicitly invoke it (e.g. "use the nano-banana skill to generate a hero image"). Once active, Claude will:
 
-1. Verify `@google/genai` and `GEMINI_API_KEY` are set up.
-2. Write a tailored generation script that saves both the image and the conversation JSON (so you can iterate later).
-3. Craft a prompt using the prompt-engineering rules — typography described with adjectives, spatial language for layout, explicit negative guidance.
-4. Run the script and save the output to `.gemini-output/`.
-5. **Read the generated image and run a QC checklist** — text accuracy, artifacts, layout, color, typography.
-6. Auto-iterate (up to 3 rounds) on objective flaws like misspellings or missing elements, telling you what it's fixing.
-7. Present the final image with structured commentary and suggested next iterations.
+1. **Consult `gemini-interactions-api` first** for the current canonical model list and SDK syntax — so this skill never goes stale on Google's API surface.
+2. Verify `@google/genai` and `GEMINI_API_KEY` are set up.
+3. Write a tailored generation script that saves both the image and the conversation JSON (so you can iterate later).
+4. Craft a prompt using the prompt-engineering rules — typography described with adjectives, spatial language for layout, explicit negative guidance.
+5. Run the script and save the output to `.gemini-output/`.
+6. **Read the generated image and run a QC checklist** — text accuracy, artifacts, layout, color, typography.
+7. Auto-iterate (up to 3 rounds) on objective flaws like misspellings or missing elements, telling you what it's fixing.
+8. Present the final image with structured commentary and suggested next iterations.
 
 ## License
 
