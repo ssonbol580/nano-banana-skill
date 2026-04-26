@@ -1,0 +1,6 @@
+node_modules/
+.env
+.env.local
+.gemini-output/
+.gemini-conversations/
+.DS_Store

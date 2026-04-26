@@ -1,0 +1,23 @@
+{
+  "skill_name": "nano-banana",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I need to generate a hero image for my coffee shop website. A photorealistic latte art in a ceramic cup on a marble counter, warm morning light. Save it as coffee-hero.png",
+      "expected_output": "A TypeScript/JS script that calls Gemini with a well-crafted prompt using spatial language and specific color descriptors (not generic terms), generates an image, and saves it to coffee-hero.png. Should include retry/timeout logic and save conversation state for potential iteration.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "Create a social media banner image for a summer music festival. It should have the text 'SUNSET BEATS 2025' in bold lettering, 'August 15-17 | Venice Beach' below it, and 'Tickets at sunsetbeats.com' at the bottom. Make it 16:9 aspect ratio.",
+      "expected_output": "A generation script with a prompt that describes each text element with adjective-based typography (not font names), uses spatial anchoring for positioning, includes negative guidance about text rendering, and sets aspect ratio to 16:9. Should use the prompt engineering patterns from the skill.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I'm working on a new project for a pet food brand called PawFuel. I need you to generate 3 variations of a product bag design — one clean/modern, one playful/colorful, and one premium/luxury. Then I want to iterate on whichever looks best to make the colors warmer.",
+      "expected_output": "A script that implements batch generation (3 variations with concurrency, staggered requests), saves conversation state for each variation so they can be iterated on later, and includes an iteration path. Should use the forking pattern for iteration rather than regenerating from scratch.",
+      "files": []
+    }
+  ]
+}
